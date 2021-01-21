@@ -8,7 +8,7 @@ A rate limiter for Adonis 4.1
 [![Known Vulnerabilities](https://snyk.io/test/github/masasron/adonis-throttle/badge.svg?targetFile=package.json)](https://snyk.io/test/github/masasron/adonis-throttle?targetFile=package.json)
 
 
-###Whitelist feature
+### Whitelist feature
 Updated by me(Niels) to support whitelisting of IP addresses. This was a feature I personally required so decided to edit and publish.
 I hereby do not claim any credit to this package whatsoever, all credits go to the original author(s).
 
