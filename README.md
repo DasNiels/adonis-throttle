@@ -7,6 +7,22 @@ A rate limiter for Adonis 4.1
 [![CircleCI](https://img.shields.io/circleci/project/github/masasron/adonis-throttle.svg)](https://circleci.com/gh/masasron/adonis-throttle)
 [![Known Vulnerabilities](https://snyk.io/test/github/masasron/adonis-throttle/badge.svg?targetFile=package.json)](https://snyk.io/test/github/masasron/adonis-throttle?targetFile=package.json)
 
+
+###Whitelist feature
+Updated by me(Niels) to support whitelisting of IP addresses. This was a feature I personally required so decided to edit and publish.
+I hereby do not claim any credit to this package whatsoever, all credits go to the original author(s).
+
+In order to whitelist a list of IP addresses simply add
+```
+// throttle.js config file
+whitelist: [
+    '127.0.0.1',
+    '123.456.78.90',
+    //...
+]
+```
+And that's it, any requests made from those IP addresses will no longer be throttled.
+
 ## Installation
 
 > For AdonisJS below version 4.1, you need install 2.0.x

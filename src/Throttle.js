@@ -13,12 +13,14 @@ class Throttle {
 
     /**
      * Create a new instance
-     * 
+     *
      * @param {cacheDriver} cache
+     * @param {array} whitelist
      * @return {Boolean}
      */
-    constructor(cache) {
-        this.store = cache
+    constructor( cache, whitelist ) {
+        this.store = cache;
+        this.whitelist = whitelist;
     }
 
     /**
@@ -30,18 +32,23 @@ class Throttle {
      *
      * @return {Boolean}
      */
-    resource(key, maxAttempts = 60, decayInSeconds = 60) {
-        this.key = key
-        this.maxAttempts = maxAttempts
-        this.decayInSeconds = decayInSeconds
+    resource( key, maxAttempts = 60, decayInSeconds = 60 ) {
+        this.key = key;
+        this.maxAttempts = maxAttempts;
+        this.decayInSeconds = decayInSeconds;
     }
 
     /**
      * Rate limit access to a resource.
      *
+     * @param {string} ipAddress
+     *
      * @return {Boolean}
      */
-    attempt() {
+    attempt( ipAddress ) {
+        if( this.whitelist.find( ip => ip === ipAddress ) ) // whitelist check
+            return true;
+
         let response = this.check()
         this.hit()
         return response
@@ -49,13 +56,13 @@ class Throttle {
 
     /**
      * Increment expiration of the current resource.
-     * 
+     *
      * @param {Number} seconds - default is 5
      *
      * @return {Throttle}
      */
-    incrementExpiration(seconds) {
-        this.store.incrementExpiration(this.key, seconds)
+    incrementExpiration( seconds ) {
+        this.store.incrementExpiration( this.key, seconds )
         return this
     }
 
@@ -65,10 +72,10 @@ class Throttle {
      * @return {Throttle}
      */
     hit() {
-        if (this.count()) {
-            return this.store.increment(this.key)
+        if( this.count() ) {
+            return this.store.increment( this.key )
         }
-        return this.store.put(this.key, 1, this.decayInSeconds*1000)
+        return this.store.put( this.key, 1, this.decayInSeconds * 1000 )
     }
 
     /**
@@ -77,8 +84,8 @@ class Throttle {
      * @return {Number}
      */
     count() {
-        let count = this.store.get(this.key)
-        if (typeof count === 'undefined') {
+        let count = this.store.get( this.key )
+        if( typeof count === 'undefined' ) {
             return 0
         }
         return count
@@ -98,8 +105,8 @@ class Throttle {
      *
      * @return {Number}
      */
-    remainingAttempts(){
-        return this.maxAttempts-this.count()
+    remainingAttempts() {
+        return this.maxAttempts - this.count()
     }
 
 }
