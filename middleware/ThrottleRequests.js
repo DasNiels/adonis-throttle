@@ -34,9 +34,9 @@ class ThrottleRequests {
      */
     async handle({request, response}, next, [ maxAttempts = 60, decayInSeconds = 60 ], uid = false) {
         const signature = this._resolveSignature(request, uid)
-        this.throttle.resource(signature, parseInt(maxAttempts), parseInt(decayInSeconds), request.ip( ))
+        this.throttle.resource(signature, parseInt(maxAttempts), parseInt(decayInSeconds))
 
-        if (!this.throttle.attempt()) {
+        if (!this.throttle.attempt( request.ip( ) ) ) {
             this.throttle.incrementExpiration()
             this._addHeaders(
                 response,
